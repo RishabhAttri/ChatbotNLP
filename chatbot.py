@@ -112,24 +112,33 @@ for i in range(len(clean_answers)):
 
 #Mapping each word to its corresponding integer
 #Filtering out the non-frequent word
-question_to_ints = []
+question_into_ints = []
 for question in clean_questions:
     ints = []
-    for word in question.spilt():
+    for word in question.split():
         if word not in questionswords2int:
             ints.append(questionswords2int['<OUT>'])
         else:
             ints.append(questionswords2int[word])
-    question_to_ints.append(ints)
-answers_to_int = []
-for asnwer in clean_answers:
+    question_into_ints.append(ints)
+answers_into_int = []
+for answer in clean_answers:
     ints = []
-    for word in asnwer.spilt():
-        if word not in questionswords2int:
+    for word in answer.split():
+        if word not in answerswords2int:
             ints.append(answerswords2int['<OUT>'])
         else:
             ints.append(answerswords2int[word])
-    answer_to_int.append(ints)
-        
+    answers_into_int.append(ints)
+
+#Sorting questions and answers acc.to the length of the questions
+sorted_clean_questions = []
+sorted_clean_answers = []
+for length in range(1,26):
+    for i in enumerate(question_into_ints):
+        if len(i[1]) == length:
+            sorted_clean_questions.append(question_into_ints[i[0]])
+            sorted_clean_answers.append(answers_into_int[i[0]])
+    
     
     
