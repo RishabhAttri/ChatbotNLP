@@ -24,5 +24,61 @@ for line in lines:
 # Creating a list of only conversation_ids
 conversation_ids = []
 for convo in conversations:
-    _convo = convo.splitby(" +++$+++ ")[-1][1:-1].replace("'","").replace(" ","")
-    conversation_ids.append()
+    _convo = convo.split(" +++$+++ ")[-1][1:-1].replace("'","").replace(" ","")
+    conversation_ids.append(_convo.split(","))
+
+# Create a question and answer list
+questions = []
+answers = []
+for convo in conversation_ids:
+    for i in range(len(convo)-1):
+        questions.append(id2line[convo[i]])
+        answers.append(id2line[convo[i+1]])
+
+# Clean the text 
+def clean_text(text):
+    text = text.lower()
+    text = re.sub(r"i'm", "i am", text)
+    text = re.sub(r"he's", "he is", text)
+    text = re.sub(r"she's", "she is", text)
+    text = re.sub(r"what's", "what is", text)
+    text = re.sub(r"where's", "where is", text)
+    text = re.sub(r"that's", "that is", text)
+    text = re.sub(r"\'ll", " will", text)
+    text = re.sub(r"\'ve", " have", text)
+    text = re.sub(r"\'re", " are", text)
+    text = re.sub(r"\'d", " would", text)
+    text = re.sub(r"can't", "cannot", text)
+    text = re.sub(r"won't", "will not", text)
+    text = re.sub(r"[-()~@<>+=|.?\"#;:,{}]", "", text)
+    return text
+
+# Clean questions 
+clean_questions = []
+for question in questions:
+    clean_questions.append(clean_text(question))
+
+# Clean Answers
+clean_answers = []
+for answer in answers:
+    clean_answers.append(clean_text(answer))
+
+# count the frequencies of words 
+word2count = {}
+for question in clean_questions:
+    for word in question.split(" "):
+        if word2count.get(word) is None:
+            word2count[word] = 1
+        else:
+            word2count[word] += 1
+            
+for ans in clean_answers:
+    for word in ans.split(" "):
+        if word2count.get(word) is None:
+            word2count[word] = 1
+        else:
+            word2count[word] += 1
+
+    
+    
+    
