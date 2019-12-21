@@ -23,7 +23,7 @@ for line in lines:
 
 # Creating a list of only conversation_ids
 conversation_ids = []
-for convo in conversations:
+for convo in conversations[:-1]:
     _convo = convo.split(" +++$+++ ")[-1][1:-1].replace("'","").replace(" ","")
     conversation_ids.append(_convo.split(","))
 
@@ -79,6 +79,34 @@ for ans in clean_answers:
         else:
             word2count[word] += 1
 
+# Taking the words which don't appear more than the threshold
+threshold = 20
+questionswords2int = {}
+word_number = 0
+for word, count in word2count.items():
+    if count >= threshold:
+        questionswords2int[word] = word_number
+        word_number += 1
+answerswords2int = {}
+word_number = 0
+for word, count in word2count.items():
+    if count >= threshold:
+        answerswords2int[word] = word_number
+        word_number += 1
+
+# Creating the last tokens for Seq2Seq model
+        
+tokens = ['<PAD>','<OUT>','<EOS>','<SOS>']
+for token in tokens:
+    questionswords2int[token] = len(questionswords2int) + 1
+
+for token in tokens:
+    answerswords2int[token] = len(answerswords2int) + 1
     
-    
+# Creating inverse dictionary of answerswords2int
+answersint2words = {w_i: w for w, w_i in answerswords2int.items()}
+
+# Adding EOS token in clean_answers
+for i in range(len(clean_answers)):
+    clean_answers[i] += ' <EOS>'
     
