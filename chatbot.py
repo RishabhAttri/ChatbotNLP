@@ -109,4 +109,27 @@ answersint2words = {w_i: w for w, w_i in answerswords2int.items()}
 # Adding EOS token in clean_answers
 for i in range(len(clean_answers)):
     clean_answers[i] += ' <EOS>'
+
+#Mapping each word to its corresponding integer
+#Filtering out the non-frequent word
+question_to_ints = []
+for question in clean_questions:
+    ints = []
+    for word in question.spilt():
+        if word not in questionswords2int:
+            ints.append(questionswords2int['<OUT>'])
+        else:
+            ints.append(questionswords2int[word])
+    question_to_ints.append(ints)
+answers_to_int = []
+for asnwer in clean_answers:
+    ints = []
+    for word in asnwer.spilt():
+        if word not in questionswords2int:
+            ints.append(answerswords2int['<OUT>'])
+        else:
+            ints.append(answerswords2int[word])
+    answer_to_int.append(ints)
+        
+    
     
